@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>修改商品</title>
+</head>
+<body>
+    <form id="updForm" method="post">
+        <center><br><br>
+            <input name="sid" type="hidden" th:value="${sp.sid}">
+            商品名称：<input class="easyui-textbox" name="sname" th:value="${sp.sname}" style="width:200px"><br><br>
+            商品类型：<input type="radio" name="stype" value="电器" th:field="${sp.stype}">电器
+                    <input type="radio" name="stype" value="食品" th:field="${sp.stype}">食品
+                    <input type="radio" name="stype" value="水果" th:field="${sp.stype}">水果<br><br>
+            商品价格：<input class="easyui-textbox" name="sprice" th:value="${sp.sprice}" style="width:200px"><br><br>
+
+        <!-- 下拉框   图书类型：<select name="booktype"  th:value=${book.booktype} class="easyui-combobox" style="width:200px;">
+                <option th:selected="${book.booktype==-1}"  value="-1">请选择</option>
+                <option th:selected="${book.booktype==1}"  value="1">言情</option>
+                <option th:selected="${book.booktype==2}" value="2">动作</option>
+                <option th:selected="${book.booktype==3}" value="3">穿越</option>
+            </select><br>-->
+        </center>
+    </form>
+</body>
+</html>

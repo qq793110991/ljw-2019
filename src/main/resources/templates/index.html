@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+    <!-- 引入EasyUI的样式文件-->
+    <link rel="stylesheet" href="../js/easyui/themes/default/easyui.css" type="text/css"/>
+    <!-- 引入EasyUI的图标样式文件-->
+    <link rel="stylesheet"href="../js/easyui/themes/icon.css" type="text/css"/>
+    <!-- 引入JQuery -->
+    <script type="text/javascript" src="../js/easyui/jquery.min.js"></script>
+    <!-- 引入EasyUI -->
+    <script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+    <!-- 引入EasyUI的中文国际化js，让EasyUI支持中文 -->
+    <script type="text/javascript" src="../js/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <!-- 引入EasyUI的生成树的插件 -->
+    <script type="text/javascript" src="../js/easyui/util-js.js"></script>
+</head>
+<body>
+    <form id="serch">
+        关键字:<input type="text" id="sname">
+        <input type="button" value="搜索" onclick="serch()">
+    </form>
+
+    <table id="sp-table"></table>
+    <div id="sp-div"></div>
+    <div id="tb">
+        <a id="btn-add">新增</a><br>
+    </div>
+<script type="text/javascript">
+    function serch(){
+        $('#sp-table').datagrid({
+            url:'../caozuo/search',
+            fitColumns:true,
+            singleSelect:true,
+            selectOnCheck:false,
+            checkOnSelect:false,
+            toolbar: '#tb',
+            pagination:true,
+            pagePosition:'bottom',
+            pageNumber:1,
+            pageSize:3,
+            pageList:[3,5,8,10],
+            queryParams: {
+                'sname': $("#sname").val()
+            },
+            columns:[
+                [
+                {field:'sid',title:'商品编号',width:70,align:'center'},
+                {field:'sname',title:'商品名称',width:150,align:'center'},
+                {field:'stype',title:'商品类型',width:150,align:'center'},
+                {field:'sprice',title:'商品价格',width:150,align:'center'},
+                {field:'caozuo',title:'操作',align:'center',
+                    formatter: function(value,row,index){
+                        var sss = "<input type='button' value='修改' onclick='xiugai("+row.sid+")'>";
+                        sss += "<input type='button' value='删除' onclick='shanchu("+row.sid+")'>";
+                        return sss;
+                    }
+                }
+                ]
+            ]
+        });
+    }
+
+
+    function xiugai(id){
+        $('#sp-div').dialog({
+            title: '修改商品',
+            width: 300,
+            height: 500,
+            href: '../caozuo/chaxiu?sid='+id,
+            modal: true,
+            buttons:[{
+                text:'保存',
+                handler:function(){
+                    $('#updForm').form('submit', {
+                        url: "../caozuo/addShangpin",
+                        onSubmit: function(){
+
+                        },
+                        success: function(){
+                            $("#sp-table").datagrid('reload');
+                            $("#sp-div").dialog('close');
+                        }
+                    });
+                }
+            },{
+                text:'关闭',
+                handler:function(){
+                    $("#sp-div").dialog("close")
+                }
+            }]
+        });
+    }
+
+
+    $(function(){
+        $('#btn-add').linkbutton({
+            onClick:function(){
+                $('#sp-div').dialog({
+                    title: '新增商品',
+                    width: 300,
+                    height: 500,
+                    href: '../caozuo/toadd',
+                    modal: true,
+                    buttons:[{
+                        text:'新增',
+                        handler:function(){
+                            $('#addForm').form('submit', {
+                                url: "../caozuo/addShangpin",
+                                onSubmit: function(){
+
+                                },
+                                success: function(data){
+                                    alert(data);
+                                    $.messager.show({
+                                        title:'提示消息',
+                                        msg:'新增成功！',
+                                        timeout:2000,
+                                        showType:'slide'
+                                    });
+                                    $("#sp-table").datagrid('reload');
+                                    $("#sp-div").dialog('close');
+                                }
+                            });
+                        }
+                    },{
+                        text:'取消',
+                        handler:function(){
+                            $("#sp-div").dialog("close")
+                        }
+                    }]
+                });
+            }
+        });
+    })
+
+    function shanchu(sid){
+        $.ajax({
+            url:"../caozuo/deleteShangpin?sid="+sid,
+            type:"post",
+            success:function(data){
+                $.messager.show({
+                    title:'提示消息',
+                    msg:'删除成功！',
+                    timeout:2000,
+                    showType:'slide'
+                });
+                $("#sp-table").datagrid('reload');
+            }
+        })
+    }
+
+    $(function(){
+        serch()
+    })
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.mapper.ShangpinMapper" >
+
+<!--  <select id="queryCount" resultType="long" >
+    select count(*) from t_shangpin
+  </select>
+
+  <select id="queryShangpin" resultType="com.jk.model.Shangpin" >
+    select * from t_shangpin
+    limit #{sta},#{rows}
+  </select>-->
+
+  <select id="querySpList" resultType="com.jk.model.Shangpin" >
+    select * from t_shangpin
+  </select>
+
+  <insert id="insertShangpin" >
+    <selectKey resultType="java.lang.Integer" keyProperty="sid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_shangpin (sname, stype, sprice)
+    values (#{sname}, #{stype}, #{sprice})
+  </insert>
+
+  <delete id="deleteShangpin" >
+    delete from t_shangpin where sid = #{sid}
+  </delete>
+
+  <select id="queryShangpinById" resultType="com.jk.model.Shangpin" >
+    select * from t_shangpin where sid = #{sid}
+  </select>
+
+  <update id="updateShanghai" >
+    update t_shangpin
+    set sname = #{sname}, stype = #{stype}, sprice = #{sprice}
+    where sid = #{sid}
+  </update>
+
+
+
+</mapper>
